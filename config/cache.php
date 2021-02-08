@@ -86,6 +86,11 @@ return [
             'endpoint' => env('DYNAMODB_ENDPOINT'),
         ],
 
+        // TODO: remove this and change env to enable cache
+        'none' => [
+            'driver' => 'null',
+        ],
+
     ],
 
     /*
