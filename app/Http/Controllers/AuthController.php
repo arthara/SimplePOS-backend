@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public $loginAfterSignUp = true;
+
     /**
      * Create a new AuthController instance.
      *
@@ -40,6 +42,9 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => app('hash')->make($request->password)
             ]);
+
+            if($this->loginAfterSignUp)
+                return $this->login($request);
 
             return response()->json($user, 201);
         } catch (\Exception $e) {
