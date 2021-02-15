@@ -62,4 +62,8 @@ class User extends Model implements
     public function can($abilities, $arguments = []){
 
     }
+
+    public function store(){
+        return $this->hasMany("App/Models/Store");
+    }
 }
