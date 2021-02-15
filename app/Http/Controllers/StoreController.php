@@ -23,8 +23,11 @@ class StoreController extends Controller
             'phone_number' => 'string',
         ]);
 
+        //if uploaded file exist
         if ($logo =  $request->file("logo")){
-            $logo_name = $logo->store(Store::$LOGO_PATH);
+            $logo_path = $logo->store(Store::$LOGO_PATH);
+            //remove folder name from path
+            $logo_name = str_replace(Store::$LOGO_PATH."/", '', $logo_path);
         }
 
         $userId = Auth::user()->id;
