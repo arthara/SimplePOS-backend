@@ -8,7 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements
+class User extends BaseModel implements
     AuthenticatableContract,
     AuthorizableContract,
     JWTSubject
