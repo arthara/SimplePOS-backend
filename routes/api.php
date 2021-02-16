@@ -25,4 +25,11 @@ Route::group(['middleware' => 'api'], function(){
     Route::group(['prefix' => 'stores', 'middleware' => 'authorization'], function () {
         Route::post('/', 'StoreController@store');
     });
+
+    //Category
+    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
+        Route::post('/{store}', 'CategoryController@getCategoriesOfCurrentStore')
+            ->name('get-category-on-store');
+    });
+    Route::resource('category', 'CategoryController');
 });
