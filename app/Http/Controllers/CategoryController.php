@@ -104,8 +104,20 @@ class CategoryController extends Controller
      * @param Store $store
      * @return JsonResponse|Response
      */
-    public function getAllCategoryOfCurrentStore(Store $store){
+    public function getCategoriesOfCurrentStore(Store $store){
+        $data = Category::where('store_id', $store->id)->first();
 
+        if ($data)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data successfully!',
+                'data' => $data
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 200);
     }
 
 
