@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Store extends Model
+class Store extends BaseModel
 {
     public static $LOGO_PATH = "store logos";
     //
