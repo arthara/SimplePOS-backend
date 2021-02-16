@@ -27,7 +27,7 @@ Route::group(['middleware' => 'api'], function(){
     });
 
     //Category
-    Route::group(['prefix' => 'category', 'as' => 'categories.'], function () {
+    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
         Route::post('/{store}', 'CategoryController@getCategoriesOfCurrentStore')
             ->name('get-category-on-store');
     });
