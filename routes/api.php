@@ -27,9 +27,16 @@ Route::group(['middleware' => 'api'], function(){
     });
 
     //Category
-    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
-        Route::post('/{store}', 'CategoryController@getCategoriesOfCurrentStore')
+    Route::group(['prefix' => 'categories', 'middleware' => 'authorization'], function () {
+        Route::get('/{store}', 'CategoryController@getCategoriesOfCurrentStore')
             ->name('get-category-on-store');
     });
     Route::resource('category', 'CategoryController');
+
+    //Product
+    Route::group(['prefix' => 'categories', 'middleware' => 'authorization'], function () {
+        Route::get('/{store}', 'ProductController@getAllProductofCategory')
+            ->name('get-product-of-category');
+    });
+    Route::resource('Product', 'ProductController');
 });

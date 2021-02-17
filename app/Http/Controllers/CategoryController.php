@@ -44,7 +44,7 @@ class CategoryController extends Controller
                 'success' => true,
                 'message' => 'Add data successfully!',
                 'data' => $category,
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
@@ -77,7 +77,7 @@ class CategoryController extends Controller
                 'success' => true,
                 'message' => 'Update data successfully!',
                 'data' => $category_item,
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
@@ -88,16 +88,20 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        if ($category->delete()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Delete data successfully!',
-            ], 200);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Delete data failed!',
-            ], 500);
+        try {
+            if ($category->delete()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Delete data successfully!',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Delete data failed!',
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return $e;
         }
     }
 
@@ -115,12 +119,12 @@ class CategoryController extends Controller
                 'success' => true,
                 'message' => 'Get data successfully!',
                 'data' => $data
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 200);
+            ], 500);
     }
 
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -55,7 +57,7 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Add data successfully!',
                 'data' => $product,
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
@@ -95,7 +97,7 @@ class ProductController extends Controller
             $fileName = $product->image;
         }
 
-        $isUpdate = HealthAgency::where('id', $product->id)
+        $isUpdate = Product::where('id', $product->id)
             ->update([
                 'name' => $request->name,
                 'address' => $request->address,
@@ -111,7 +113,7 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Update data successfully!',
                 'data' => $data,
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
@@ -119,4 +121,36 @@ class ProductController extends Controller
                 'data' => $data,
             ], 500);
     }
+
+    public function destroy(Product $product)
+    {
+        if ($product->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Delete data successfully!',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delete data failed!',
+            ], 500);
+        }
+    }
+
+    public function getAllProductofCategory(Category $category){
+        $data = Product::where('categories_id', $category->id)->first();
+
+        if($data)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data successfully!',
+                'data' => $data
+            ], 201);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 500);
+    }
+
 }
