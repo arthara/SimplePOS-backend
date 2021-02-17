@@ -30,13 +30,17 @@ Route::group(['middleware' => 'api'], function(){
     Route::group(['prefix' => 'categories', 'middleware' => 'authorization'], function () {
         Route::get('/{store}', 'CategoryController@getCategoriesOfCurrentStore')
             ->name('get-category-on-store');
+        Route::get('/all', 'CategoryController@getAllCategory')
+            ->name('get-all-categories');
     });
     Route::resource('category', 'CategoryController');
 
     //Product
-    Route::group(['prefix' => 'categories', 'middleware' => 'authorization'], function () {
-        Route::get('/{store}', 'ProductController@getAllProductofCategory')
-            ->name('get-product-of-category');
+    Route::group(['prefix' => 'products', 'middleware' => 'authorization'], function () {
+        Route::get('/{store}/{category}', 'ProductController@getAllProductofCategory')
+            ->name('get-all-product-of-category');
+        Route::get('/all', 'ProductController@getAllProduct')
+            ->name('get-all-products');
     });
     Route::resource('Product', 'ProductController');
 });

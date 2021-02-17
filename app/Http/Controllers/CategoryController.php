@@ -4,29 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Store;
-use http\Client\Response;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
+    /**
+     * Display a listing of the resource.
+     * @return Category[]|Collection|JsonResponse|Response
+     */
     public function index()
     {
-        return Category::all();
+        $category = Category::paginate(8);
+
+        if ($category)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data success',
+                'data' => $category,
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'color' => 'required|string',
-            'categories_id' => 'required|numeric'
+
         ]);
 
         if ($validator->fails()) {
@@ -52,6 +74,13 @@ class CategoryController extends Controller
             ], 500);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param Category $category
+     * @return JsonResponse|Response
+     */
     public function update(Request $request, Category $category)
     {
         $validator = Validator::make($request->all(), [
@@ -86,32 +115,52 @@ class CategoryController extends Controller
             ], 500);
     }
 
+    /**
+     * @param Category $category
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
     public function destroy(Category $category)
     {
-        try {
-            if ($category->delete()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Delete data successfully!',
-                ], 201);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Delete data failed!',
-                ], 500);
-            }
-        } catch (\Exception $e) {
-            return $e;
+        if ($category->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Delete data successfully!',
+            ], 201);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delete data failed!',
+            ], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * @return JsonResponse|Response
+     */
+    public function getAllCategory(){
+        $categories = Category::all();
+
+        if ($categories)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data success',
+                'data' => $categories,
+            ], 201);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 201);
+    }
+
+
+    /**
      * @param Store $store
      * @return JsonResponse|Response
      */
-    public function getCategoriesOfCurrentStore(Store $store){
+    public function getCategoriesOfCurrentStore(Store $store)
+    {
         $data = Category::where('store_id', $store->id)->first();
 
         if ($data)

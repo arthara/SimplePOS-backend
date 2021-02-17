@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends BaseModel
 {
     public $fillable = [
-        "name", "color"
+        "name", "color", "store_id"
     ];
 
     public function store(){

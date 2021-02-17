@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,16 +19,38 @@ class ProductController extends Controller
         $this->middleware('auth:api');
     }
 
+    /**
+     * Display a listing of the resource.
+     * @return Product[]|Collection|JsonResponse|Response
+     */
     public function index()
     {
-        return Product::all();
+        $products = Product::paginate(8);
+
+        if ($products)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data success',
+                'data' => $products,
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 200);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'picture' => 'image|mimes:jpeg,png,jpg|max:2048|nullable',
             'total' => 'required|numeric',
             'selling_price' => 'required|numeric',
             'cost_price' => 'required|numeric'
@@ -122,6 +146,14 @@ class ProductController extends Controller
             ], 500);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Product $product
+     * @return JsonResponse|Response
+     * @throws Exception
+     */
+
     public function destroy(Product $product)
     {
         if ($product->delete()) {
@@ -137,7 +169,32 @@ class ProductController extends Controller
         }
     }
 
-    public function getAllProductofCategory(Category $category){
+
+    /**
+     * @return JsonResponse|Response
+     */
+    public function getAllProduct(){
+        $products = Product::all();
+
+        if ($products)
+            return response()->json([
+                'success' => true,
+                'message' => 'Get data success',
+                'data' => $products,
+            ], 201);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Data is empty!',
+            ], 201);
+    }
+
+    /**
+     * @param Category $category
+     * @return JsonResponse|Response
+     */
+    public function getAllProductofCategory(Category $category)
+    {
         $data = Product::where('categories_id', $category->id)->first();
 
         if($data)
@@ -152,5 +209,4 @@ class ProductController extends Controller
                 'message' => 'Data is empty!',
             ], 500);
     }
-
 }
