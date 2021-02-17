@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Store extends BaseModel
 {
     public static $LOGO_PATH = "store logos";
     //
 
     public $fillable = [
-        "name", "logo", "address", "phone_number", "users_id"
+        "name", "logo", "address", "phone_number", "user_id"
     ];
 
     public function user(){

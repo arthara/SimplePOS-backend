@@ -17,10 +17,10 @@ class StoreController extends Controller
 
         $request->validate([
             //validate incoming request
-            'name' => 'required|string',
-            'logo' => 'max:1000|mimes:jpeg,jpg,png', //max size 1mb
-            'address' => 'string',
-            'phone_number' => 'string',
+            'name' => 'required|string|max:100',
+            'logo' => 'max:2000|mimes:jpeg,jpg,png,svg|nullable', //max size 1mb
+            'address' => 'string|max:100|nullable',
+            'phone_number' => 'string|max:100|nullable',
         ]);
 
         //if uploaded file exist
@@ -34,7 +34,7 @@ class StoreController extends Controller
         $store = Store::create([
             'name' => $request->name,
             'logo' => $logo_name,
-            'users_id' => $userId,
+            'user_id' => $userId,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
         ]);

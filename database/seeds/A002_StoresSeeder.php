@@ -12,7 +12,7 @@ class A002_StoresSeeder extends Seeder
     public function run()
     {
         $stores = array(
-            array('id' => 1, 'users_id' => 1, 'name' => 'Toko A','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03')
+            array('id' => 1, 'user_id' => 1, 'name' => 'Toko A','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03')
         );
         
         DB::table('stores')->insert($stores);
