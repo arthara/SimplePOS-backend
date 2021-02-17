@@ -70,7 +70,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function update(Request $request, HealthAgency $healthAgency)
+    public function update(Request $request, Product $product)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
@@ -87,15 +87,15 @@ class ProductController extends Controller
         //Checking File
         $uploadFile = $request->file('image');
         if ($uploadFile != null) {
-            File::delete(storage_path('app/public/img/products/') . $healthAgency->image);
+            File::delete(storage_path('app/public/img/products/') . $product->image);
             $path = $uploadFile->store('public/img/products');
             $fileName = explode('/', $path);
             $fileName = end($fileName);
         } else {
-            $fileName = $healthAgency->image;
+            $fileName = $product->image;
         }
 
-        $isUpdate = HealthAgency::where('id', $healthAgency->id)
+        $isUpdate = HealthAgency::where('id', $product->id)
             ->update([
                 'name' => $request->name,
                 'address' => $request->address,
@@ -104,19 +104,19 @@ class ProductController extends Controller
                 'email' => $request->email,
             ]);
 
-        $health_agency = HealthAgency::where('id', $healthAgency->id)->first();
+        $data = Product::where('id', $product->id)->first();
 
         if ($isUpdate)
             return response()->json([
                 'success' => true,
                 'message' => 'Update data successfully!',
-                'data' => $health_agency,
+                'data' => $data,
             ], 200);
         else
             return response()->json([
                 'success' => false,
                 'message' => 'Update data failed!',
-                'data' => $health_agency,
+                'data' => $data,
             ], 500);
     }
 }
