@@ -15,8 +15,8 @@ class CreateReceiptsTable extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stores_id')->constrained('stores')->onDelete('cascade');
-            $table->timestamp('receipts_time');
+            $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
+            $table->timestamp('receipt_time');
             $table->string('customer_name', 100);
             $table->string('customer_phone', 100);
             $table->float('tax', 9, 2)->nullable();
