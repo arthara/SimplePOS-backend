@@ -34,7 +34,7 @@ class StoreController extends Controller
         $store = Store::create([
             'name' => $request->name,
             'logo' => $logo_name,
-            'users_id' => $userId,
+            'user_id' => $userId,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
         ]);
