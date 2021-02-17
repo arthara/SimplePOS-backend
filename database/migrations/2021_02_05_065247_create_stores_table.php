@@ -15,7 +15,7 @@ class CreateStoresTable extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name', 100);
             $table->string('logo', 100)->nullable();
             $table->string('address', 100)->nullable();
