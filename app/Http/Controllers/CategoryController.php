@@ -8,6 +8,7 @@ use http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -25,6 +26,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'color' => 'required|string',
+            'categories_id' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -34,6 +36,7 @@ class CategoryController extends Controller
         $category = Category::create([
             'name' => $request->name,
             'color' => $request->color,
+            'categories_id' => $request->categories_id
         ]);
 
         if ($category)

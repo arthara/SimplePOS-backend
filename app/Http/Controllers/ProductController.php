@@ -67,17 +67,17 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\HealthAgency  $healthAgency
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function update(Request $request, HealthAgency $healthAgency)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'address' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'call_center' => 'required',
-            'email' => 'required|email|unique:health_agencies,email,' . $healthAgency->id,
+            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'total' => 'required|numeric',
+            'selling_price' => 'required|numeric',
+            'cost_price' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -87,8 +87,8 @@ class ProductController extends Controller
         //Checking File
         $uploadFile = $request->file('image');
         if ($uploadFile != null) {
-            File::delete(storage_path('app/public/img/health_agencies/') . $healthAgency->image);
-            $path = $uploadFile->store('public/img/health_agencies');
+            File::delete(storage_path('app/public/img/products/') . $healthAgency->image);
+            $path = $uploadFile->store('public/img/products');
             $fileName = explode('/', $path);
             $fileName = end($fileName);
         } else {
