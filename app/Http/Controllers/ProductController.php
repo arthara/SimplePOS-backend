@@ -100,7 +100,7 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'picture' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'picture' => 'image|mimes:jpeg,png,jpg|max:2048|nullable',
             'total' => 'required|numeric',
             'selling_price' => 'required|numeric',
             'cost_price' => 'required|numeric'
@@ -193,9 +193,9 @@ class ProductController extends Controller
      * @param Category $category
      * @return JsonResponse|Response
      */
-    public function getAllProductofCategory(Category $category)
+    public function getAllProductOfCategory(Category $category)
     {
-        $data = Product::where('categories_id', $category->id)->first();
+        $data = Product::where('category_id', $category->id)->first();
 
         if($data)
             return response()->json([

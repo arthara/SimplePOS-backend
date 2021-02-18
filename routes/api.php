@@ -37,10 +37,12 @@ Route::group(['middleware' => 'api'], function(){
 
     //Product
     Route::group(['prefix' => 'products', 'middleware' => 'authorization'], function () {
-        Route::get('/{store}/{category}', 'ProductController@getAllProductofCategory')
+        Route::get('/{store}/{category}', 'ProductController@getAllProductOfCategory')
             ->name('get-all-product-of-category');
         Route::get('/all', 'ProductController@getAllProduct')
             ->name('get-all-products');
     });
     Route::resource('Product', 'ProductController');
+
+    //
 });
