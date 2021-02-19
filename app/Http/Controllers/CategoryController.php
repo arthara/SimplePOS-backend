@@ -31,12 +31,12 @@ class CategoryController extends Controller
                 'success' => true,
                 'message' => 'Get data success',
                 'data' => $category,
-            ], 200);
+            ], 201);
         else
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 200);
+            ], 204);
     }
 
     /**
@@ -151,7 +151,7 @@ class CategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 201);
+            ], 204);
     }
 
 
@@ -173,7 +173,7 @@ class CategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 500);
+            ], 204);
     }
 
 
