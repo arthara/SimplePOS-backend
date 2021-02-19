@@ -10,7 +10,11 @@ class Product extends BaseModel
         "name", "category_id", "selling_price","cost_price"
     ];
 
-    public function category(){
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
         return $this->belongsTo('App\Models\Category');
     }
 }

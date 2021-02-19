@@ -32,12 +32,14 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Get data success',
                 'data' => $products,
-            ], 200);
+            ], //200
+                201
+            );
         else
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 200);
+            ], 201);
     }
 
     /**
@@ -86,7 +88,9 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Add data failed!',
-            ], 500);
+            ], //201
+         500
+        );
     }
 
     /**
@@ -143,7 +147,7 @@ class ProductController extends Controller
                 'success' => false,
                 'message' => 'Update data failed!',
                 'data' => $data,
-            ], 500);
+            ], 201);
     }
 
     /**
@@ -165,7 +169,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Delete data failed!',
-            ], 500);
+            ], 201);
         }
     }
 
@@ -207,6 +211,6 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Data is empty!',
-            ], 500);
+            ], 201);
     }
 }
