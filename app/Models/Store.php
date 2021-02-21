@@ -8,10 +8,10 @@ class Store extends BaseModel
     //
 
     public $fillable = [
-        "name", "logo", "address", "phone_number", "user_id"
+        "name", "logo", "address", "phone_number"
     ];
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }
