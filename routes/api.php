@@ -24,5 +24,6 @@ Route::group(['middleware' => 'api'], function(){
 
     Route::group(['prefix' => 'stores', 'middleware' => 'authorization'], function () {
         Route::post('/', 'StoreController@store');
+        Route::get('/', 'StoreController@index');
     });
 });

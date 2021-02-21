@@ -45,4 +45,8 @@ class StoreController extends Controller
         $user->store()->save($store);
         return response()->json($store, 201);
     }
+
+    public function index(){
+        return Auth::user()->store;
+    }
 }
