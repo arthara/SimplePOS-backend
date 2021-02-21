@@ -64,6 +64,6 @@ class User extends BaseModel implements
     }
 
     public function store(){
-        return $this->hasMany("App/Models/Store");
+        return $this->hasOne(Store::class);
     }
 }

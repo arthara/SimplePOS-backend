@@ -14,6 +14,12 @@ class StoreController extends Controller
 
     public function store(Request $request){
         $logo_name = null;
+        $user = Auth::user();
+
+        if($user->store)
+            return response()->json([
+                "message" => "User already has a store",
+            ], 409);
 
         $request->validate([
             //validate incoming request
@@ -30,14 +36,13 @@ class StoreController extends Controller
             $logo_name = str_replace(Store::$LOGO_PATH."/", '', $logo_path);
         }
 
-        $userId = Auth::user()->id;
-        $store = Store::create([
-            'name' => $request->name,
-            'logo' => $logo_name,
-            'user_id' => $userId,
-            'address' => $request->address,
-            'phone_number' => $request->phone_number,
-        ]);
+        $store = new Store();
+        $store->name = $request->name;
+        $store->logo = $logo_name;
+        $store->address = $request->address;
+        $store->phone_number = $request->phone_number;
+
+        $user->store()->save($store);
         return response()->json($store, 201);
     }
 }
