@@ -47,6 +47,12 @@ class StoreController extends Controller
     }
 
     public function index(){
-        return Auth::user()->store;
+        $store = Auth::user()->store;
+
+        if(!$store)
+            return response()->json([
+                "message" => "User's store is not found"
+            ], 404);
+        return $store;
     }
 }
