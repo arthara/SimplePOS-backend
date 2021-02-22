@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -48,17 +49,18 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'color' => 'required|string',
-
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        //$userId = Auth::user()->id;
+
         $category = Category::create([
             'name' => $request->name,
             'color' => $request->color,
-            'categories_id' => $request->categories_id
+            'store_id' => $request->store_id
         ]);
 
         if ($category)
