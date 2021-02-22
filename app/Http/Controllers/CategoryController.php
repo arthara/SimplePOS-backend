@@ -58,7 +58,7 @@ class CategoryController extends Controller
         $category = Category::create([
             'name' => $request->name,
             'color' => $request->color,
-            'categories_id' => $request->categories_id
+            'store_id' => $request->store_id
         ]);
 
         if ($category)
@@ -154,7 +154,6 @@ class CategoryController extends Controller
             ], 204);
     }
 
-
     /**
      * @param Store $store
      * @return JsonResponse|Response
@@ -175,6 +174,4 @@ class CategoryController extends Controller
                 'message' => 'Data is empty!',
             ], 204);
     }
-
-
 }
