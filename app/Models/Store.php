@@ -14,4 +14,8 @@ class Store extends BaseModel
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function receipt(){
+        return $this->hasMany(Receipt::class);
+    }
 }
