@@ -46,6 +46,10 @@ class Kernel extends HttpKernel
 
         'authorization' => [
             \App\Http\Middleware\JwtMiddleware::class,
+        ],
+
+        'store' => [
+            \App\Http\Middleware\StoreExistMiddleware::class,
         ]
     ];
 

@@ -9,16 +9,8 @@ class ReceiptItemController extends Controller
 {
     public function dailySales($inputDate){
         $date = Carbon::parse($inputDate);
-        $store = Auth::user()->store;
 
-        if(!$store)
-            return response()->json([
-                "message" => "User's store is not found"
-            ], 404);
-
-        $receipts = $store->receipt->whereBetween(
-            'receipt_time', [$date->format('Y-m-d')." 00:00:00", $date->addDay()->format('Y-m-d')." 00:00:00"]
-        );
+        $receipts = $this->getReceiptsWithCertainDate($date);
         $totalProfit = 0;
         $totalItem = 0;
 
@@ -37,5 +29,17 @@ class ReceiptItemController extends Controller
             "Total Sales" => $totalItem,
             "Laba Kotor" => $totalProfit,
         ], 200);
+    }
+
+    public function topSales($inputDate){
+
+    }
+
+    private function getReceiptsWithCertainDate($date){
+        $store = Auth::user()->store;
+
+        return $store->receipt->whereBetween(
+            'receipt_time', [$date->format('Y-m-d')." 00:00:00", $date->addDay()->format('Y-m-d')." 00:00:00"]
+        );
     }
 }
