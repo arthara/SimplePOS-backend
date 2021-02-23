@@ -22,8 +22,14 @@ Route::group(['middleware' => 'api'], function(){
         Route::post('me', 'AuthController@me');
     });
 
-    Route::group(['prefix' => 'stores', 'middleware' => 'authorization'], function () {
-        Route::post('/', 'StoreController@store');
-        Route::get('/', 'StoreController@index');
+    Route::group(['middleware' => 'authorization'], function(){
+        Route::group(['prefix' => 'stores'], function () {
+            Route::post('/', 'StoreController@store');
+            Route::get('/', 'StoreController@index');
+        });
+
+        Route::group(['prefix' => 'receipt-items'], function () {
+            Route::get('/total/{date}', 'ReceiptItemController@dailySales');
+        });
     });
 });
