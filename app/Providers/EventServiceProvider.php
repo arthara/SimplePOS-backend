@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\ArchiveNewProducts;
+use App\Events\ArchiveUpdatedProducts;
+use App\Listeners\ArchiveNewProducts as ListenersArchiveNewProducts;
+use App\Listeners\ArchiveUpdatedProducts as ListenersArchiveUpdatedProducts;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ArchiveNewProducts::class => [
+            ListenersArchiveNewProducts::class
+        ],
+        ArchiveUpdatedProducts::class => [
+            ListenersArchiveUpdatedProducts::class
+        ]
     ];
 
     /**

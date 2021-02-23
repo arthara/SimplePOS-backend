@@ -16,9 +16,8 @@ class CreateReceiptItemsTable extends Migration
         Schema::create('receipt_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('receipt_id')->constrained('receipts')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_history_id')->constrained('product_histories')->onDelete('cascade');
             $table->integer('unit_total');
-            $table->float('unit_price', 9, 2);
             $table->timestamps();
         });
     }
