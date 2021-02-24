@@ -25,11 +25,12 @@ Route::group(['middleware' => 'api'], function(){
     Route::group(['middleware' => 'authorization'], function(){
         Route::group(['prefix' => 'stores'], function () {
             Route::post('/', 'StoreController@store');
-            Route::get('/', 'StoreController@index');
+            Route::get('/', 'StoreController@index')->middleware('store');
         });
 
-        Route::group(['prefix' => 'receipt-items'], function () {
+        Route::group(['prefix' => 'receipt-items', 'middleware' => 'store'], function () {
             Route::get('/total/{date}', 'ReceiptItemController@dailySales');
+            Route::get('/top/{date}', 'ReceiptItemController@topSales');
         });
     });
 });
