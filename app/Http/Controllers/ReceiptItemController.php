@@ -27,9 +27,9 @@ class ReceiptItemController extends Controller
         }
 
         return response()->json([
-            "Date" => $inputDate,
-            "Total Sales" => $totalItem,
-            "Laba Kotor" => $totalProfit,
+            "date" => $inputDate,
+            "total_sales" => $totalItem,
+            "gross_profit" => $totalProfit,
         ], 200);
     }
 
@@ -66,11 +66,11 @@ class ReceiptItemController extends Controller
 
         //pick only the first if found more than 1 max
         return response()->json([
-            "Date" => $inputDate,
-            "Product" => Product::find($max_product_id[0]),
-            "Total Product" =>  $max_product,
-            "Category" => Category::find($max_category_id[0]),
-            "Total Category" =>  $max_category,
+            "date" => $inputDate,
+            "product" => Product::find($max_product_id[0]),
+            "total_product" =>  $max_product,
+            "category" => Category::find($max_category_id[0]),
+            "total_category" =>  $max_category,
         ], 200);
     }
 
