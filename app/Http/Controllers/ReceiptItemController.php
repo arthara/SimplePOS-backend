@@ -6,11 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
+use Exception;
 
 class ReceiptItemController extends Controller
 {
     public function dailySales($inputDate){
-        $date = Carbon::parse($inputDate);
+        try{
+            $date = Carbon::parse($inputDate);
+        }catch(Exception $e){
+            return $this->getInvalidDateResponse();
+        }
 
         $receipts = $this->getReceiptsWithCertainDate($date);
         $totalProfit = 0;
@@ -34,10 +39,30 @@ class ReceiptItemController extends Controller
     }
 
     public function topSales($inputDate){
-        $date = Carbon::parse($inputDate);
+        try{
+            $date = Carbon::parse($inputDate);
+        }catch(Exception $e){
+            return $this->getInvalidDateResponse();
+        }
+
+        $receipts = $this->getReceiptsWithCertainDate($date);
+
+        //if no receipts found only return date
+        if($receipts->isEmpty())
+            return response()->json([
+                "date" => $inputDate,
+                "product" => null,
+                "total_product" => 0,
+                "category" => null,
+                "total_category" =>  0,
+            ], 200);
+
+        return $this->countTopSales($receipts, $inputDate);
+    }
+
+    private function countTopSales($receipts, String $inputDate){
         $productsTotal = array();
         $categoriesTotal = array();
-        $receipts = $this->getReceiptsWithCertainDate($date);
 
         //sum by product and sum by category and save id as array index
         foreach($receipts as $receipt){
@@ -72,6 +97,13 @@ class ReceiptItemController extends Controller
             "category" => Category::find($max_category_id[0]),
             "total_category" =>  $max_category,
         ], 200);
+
+    }
+
+    private function getInvalidDateResponse(){
+        return response()->json([
+            "message" => "Invalid Date Received"
+        ], 422);
     }
 
     private function getReceiptsWithCertainDate($date){
