@@ -18,4 +18,8 @@ class Store extends BaseModel
     public function receipt(){
         return $this->hasMany(Receipt::class);
     }
+
+    public function category(){
+        return $this->hasMany(Category::class);
+    }
 }

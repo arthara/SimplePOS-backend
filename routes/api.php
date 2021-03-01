@@ -28,9 +28,14 @@ Route::group(['middleware' => 'api'], function(){
             Route::get('/', 'StoreController@index')->middleware('store');
         });
 
-        Route::group(['prefix' => 'receipt-items', 'middleware' => 'store'], function () {
-            Route::get('/total/{date}', 'ReceiptItemController@dailySales');
-            Route::get('/top/{date}', 'ReceiptItemController@topSales');
+        //middleware store is to check if user already has store
+        Route::group(['middleware' => 'store'], function(){
+            Route::apiResource('categories', CategoryController::class);
+
+            Route::group(['prefix' => 'receipt-items'], function () {
+                Route::get('/total/{date}', 'ReceiptItemController@dailySales');
+                Route::get('/top/{date}', 'ReceiptItemController@topSales');
+            });
         });
     });
 });
