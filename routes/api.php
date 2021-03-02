@@ -31,6 +31,7 @@ Route::group(['middleware' => 'api'], function(){
         //middleware store is to check if user already has store
         Route::group(['middleware' => 'store'], function(){
             Route::apiResource('categories', CategoryController::class);
+            Route::apiResource('products', ProductController::class);
 
             Route::group(['prefix' => 'receipt-items'], function () {
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
