@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends BaseModel
 {
+    public static $PICTURE_PATH = "products picture";
+
     protected $dispatchesEvents = [
         'created' => ArchiveNewProducts::class, //save new product to history
         'updated' => ArchiveUpdatedProducts::class, //save updated product with checking to old product history
