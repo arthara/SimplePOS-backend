@@ -95,9 +95,7 @@ class CategoryController extends Controller
                 $category->color = $request->color;
 
             $category->save();
-            return response()->json([
-                $category
-            ]);
+            return response()->json($category);
         }catch(ModelNotFoundException $e){
             return response()->json([
                 "message" => "Forbidden"
