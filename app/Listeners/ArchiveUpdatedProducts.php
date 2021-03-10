@@ -26,17 +26,23 @@ class ArchiveUpdatedProducts
     public function handle(ArchiveUpdatedProductsEvent $event)
     {
         $product = $event->product;
-        //check if last product history has receipt item, if not delete it
-        if($latestProductHistory = $product->productHistory->last()){
-            if($latestProductHistory->receipt_item)
-                $latestProductHistory->delete();
-        }
+        $latestProductHistory = $product->productHistory()->latest('id')->first();
 
-        //save updated product as history
+        //if nothing or only total changed dont create new product history
+        if($latestProductHistory->name == $product->name &&
+            $latestProductHistory->cost_price == $product->cost_price &&
+            $latestProductHistory->selling_price == $product->selling_price)
+            return;
+
+        //check if last product history has receipt item, if not delete it
+        if($latestProductHistory->receipt_item->isEmpty())
+            $latestProductHistory->delete();
+
+        //save updated product as new history
         $productHistory = new ProductHistory();
         $productHistory->name = $product->name;
         $productHistory->cost_price = $product->cost_price;
-        $productHistory->selling_price = $product->sold_price;
+        $productHistory->selling_price = $product->selling_price;
         $product->productHistory()->save($productHistory);
     }
 }
