@@ -17,8 +17,8 @@ class CreateProductHistoriesTable extends Migration
             $table->id();
             $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
             $table->string('name', 100);
-            $table->float('selling_price', 9, 2)->nullable();
-            $table->float('cost_price', 9, 2)->nullable();
+            $table->float('selling_price', 9, 2);
+            $table->float('cost_price', 9, 2);
             $table->timestamps();
         });
     }
