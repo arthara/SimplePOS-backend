@@ -142,13 +142,13 @@ class ProductController extends Controller
 
     private function renewProduct(Product $product, Request $request){
         //nullcheck
-        if($request->name)
+        if(!is_null($request->name))
             $product->name = $request->name;
-        if($request->total)
+        if(!is_null($request->total))
             $product->total = $request->total;
-        if($request->selling_price)
+        if(!is_null($request->selling_price))
             $product->selling_price = $request->selling_price;
-        if($request->cost_price)
+        if(!is_null($request->cost_price))
             $product->cost_price = $request->cost_price;
     }
 
