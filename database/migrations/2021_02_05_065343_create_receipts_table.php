@@ -17,8 +17,8 @@ class CreateReceiptsTable extends Migration
             $table->id();
             $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
             $table->timestamp('receipt_time');
-            $table->string('customer_name', 100);
-            $table->string('customer_phone', 100);
+            $table->string('customer_name', 100)->nullable();
+            $table->string('customer_phone', 100)->nullable();
             $table->float('tax', 9, 2)->nullable();
             $table->float('discount', 9, 2)->nullable();
             $table->float('other_charges', 9, 2)->nullable();
