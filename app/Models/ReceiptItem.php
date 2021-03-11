@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReceiptItem extends BaseModel
 {
-    public function receipt(){
+    public function receipt(): BelongsTo {
         return $this->belongsTo(Receipt::class);
     }
 

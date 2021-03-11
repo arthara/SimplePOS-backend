@@ -37,6 +37,8 @@ Route::group(['middleware' => 'api'], function(){
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
                 Route::get('/top/{date}', 'ReceiptItemController@topSales');
             });
+
+            Route::post('/receipts/checkout', 'ReceiptController@checkout');
         });
     });
 });
