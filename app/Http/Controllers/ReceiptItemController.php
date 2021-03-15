@@ -26,7 +26,7 @@ class ReceiptItemController extends Controller
                 $totalItem += $receiptItem->unit_total;
                 //profit += total item * (sold-cost)
                 $totalProfit += $receiptItem->unit_total *
-                    ($receiptItem->product_history->selling_price - $receiptItem->product_history->cost_price);
+                    ($receiptItem->productHistory->selling_price - $receiptItem->productHistory->cost_price);
             }
             $totalProfit += $receipt->other_charges - $receipt->discount + $receipt->tax;
         }
@@ -49,13 +49,7 @@ class ReceiptItemController extends Controller
 
         //if no receipts found only return date
         if($receipts->isEmpty())
-            return response()->json([
-                "date" => $inputDate,
-                "product" => null,
-                "total_product" => 0,
-                "category" => null,
-                "total_category" =>  0,
-            ], 200);
+            return $this->getNoSalesResponse($inputDate);
 
         return $this->countTopSales($receipts, $inputDate);
     }
@@ -68,8 +62,11 @@ class ReceiptItemController extends Controller
         foreach($receipts as $receipt){
             foreach($receipt->receiptItem as $receiptItem){
                 //if product is already deleted, skip item
-                if(!$product = $receiptItem->product_history->product)
+                $product = $receiptItem->productHistory->product;
+                var_dump($product);
+                if(is_null($product))
                     continue;
+                var_dump($product);
                 $productId = $product->id;
                 $categoryId = $product->category->id;
 
@@ -84,6 +81,9 @@ class ReceiptItemController extends Controller
             }
         }
 
+        //if all product on all receipt already deleted
+        if(empty($productsTotal))
+            return $this->getNoSalesResponse($inputDate);
         $max_product = max($productsTotal);
         $max_category = max($categoriesTotal);
         $max_product_id = array_keys($productsTotal, $max_product, false);
@@ -96,6 +96,17 @@ class ReceiptItemController extends Controller
             "total_product" =>  $max_product,
             "category" => Category::find($max_category_id[0]),
             "total_category" =>  $max_category,
+        ], 200);
+
+    }
+
+    private function getNoSalesResponse(String $inputDate) {
+        return response()->json([
+            "date" => $inputDate,
+            "product" => null,
+            "total_product" => 0,
+            "category" => null,
+            "total_category" =>  0,
         ], 200);
 
     }

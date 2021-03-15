@@ -15,7 +15,7 @@ class ReceiptItem extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product_history(): BelongsTo
+    public function productHistory(): BelongsTo
     {
         return $this->belongsTo(ProductHistory::class);
     }

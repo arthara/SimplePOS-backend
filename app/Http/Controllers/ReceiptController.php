@@ -69,7 +69,7 @@ class ReceiptController extends Controller
             $receipt_item = new ReceiptItem();
 
             $receipt_item->unit_total = $item["unit_total"];
-            $receipt_item->product_history()->associate($product_history);
+            $receipt_item->productHistory()->associate($product_history);
             $receipt_item->receipt()->associate($receipt);
             $product->save();
             $receipt_item->save();
