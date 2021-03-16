@@ -63,10 +63,8 @@ class ReceiptItemController extends Controller
             foreach($receipt->receiptItem as $receiptItem){
                 //if product is already deleted, skip item
                 $product = $receiptItem->productHistory->product;
-                var_dump($product);
                 if(is_null($product))
                     continue;
-                var_dump($product);
                 $productId = $product->id;
                 $categoryId = $product->category->id;
 
