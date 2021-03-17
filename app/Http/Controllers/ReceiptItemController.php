@@ -17,18 +17,15 @@ class ReceiptItemController extends Controller
             return $this->getInvalidDateResponse();
         }
 
-        $receipts = $this->getReceiptsWithCertainDate($date);
+        $receipts = Auth::user()->store
+                        ->dailyReceipts($date)
+                        ->get();
         $totalProfit = 0;
         $totalItem = 0;
 
         foreach($receipts as $receipt){
-            foreach($receipt->receiptItem as $receiptItem){
-                $totalItem += $receiptItem->unit_total;
-                //profit += total item * (sold-cost)
-                $totalProfit += $receiptItem->unit_total *
-                    ($receiptItem->productHistory->selling_price - $receiptItem->productHistory->cost_price);
-            }
-            $totalProfit += $receipt->other_charges - $receipt->discount + $receipt->tax;
+            $totalItem += $receipt->receiptItem()->count();
+            $totalProfit += $receipt->profit;
         }
 
         return response()->json([
@@ -45,7 +42,9 @@ class ReceiptItemController extends Controller
             return $this->getInvalidDateResponse();
         }
 
-        $receipts = $this->getReceiptsWithCertainDate($date);
+        $receipts = Auth::user()->store
+                        ->dailyReceipts($date)
+                        ->get();
 
         //if no receipts found only return date
         if($receipts->isEmpty())
@@ -113,13 +112,5 @@ class ReceiptItemController extends Controller
         return response()->json([
             "message" => "Invalid Date Received"
         ], 422);
-    }
-
-    private function getReceiptsWithCertainDate($date){
-        $store = Auth::user()->store;
-
-        return $store->receipt->whereBetween(
-            'receipt_time', [$date->format('Y-m-d')." 00:00:00", $date->addDay()->format('Y-m-d')." 00:00:00"]
-        );
     }
 }

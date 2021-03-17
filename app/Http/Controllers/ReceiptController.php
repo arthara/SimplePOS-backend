@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReceiptCollection;
 use App\Http\Resources\ReceiptResource;
 use App\Models\Receipt;
 use App\Models\ReceiptItem;
@@ -73,6 +74,19 @@ class ReceiptController extends Controller
             $receipt_item->receipt()->associate($receipt);
             $product->save();
             $receipt_item->save();
+        }
+    }
+
+    public function dailyReceipts($inputDate){
+        try {
+            $date = Carbon::parse($inputDate);
+            $receipts = Auth::user()->store
+                            ->dailyReceipts($date)
+                            ->get();
+
+            return response()->json(new ReceiptCollection($receipts));
+        }catch(\Exception $e){
+            abort("400", $e->getMessage());
         }
     }
 }
