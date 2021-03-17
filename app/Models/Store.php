@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Store extends BaseModel
@@ -19,6 +20,10 @@ class Store extends BaseModel
 
     public function receipt(){
         return $this->hasMany(Receipt::class);
+    }
+
+    public function dailyReceipts(Carbon $date){
+        return $this->receipt()->daily($date);
     }
 
     public function category(){
