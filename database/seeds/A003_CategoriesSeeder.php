@@ -12,7 +12,7 @@ class A003_CategoriesSeeder extends Seeder
     public function run()
     {
         $categories = array(
-            array('id' => 1, 'store_id' => 1, 'name' => 'Minuman', 'color' => '#ffffff','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
+            array('id' => 1, 'store_id' => 1, 'name' => 'Minuman', 'color' => '#ffdada','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
             array('id' => 2, 'store_id' => 1, 'name' => 'Bahan Makanan Pokok', 'color' => '#ff0005','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
             array('id' => 3, 'store_id' => 1, 'name' => 'Keperluan Peralatan Dapur', 'color' => '#a27172','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
             array('id' => 4, 'store_id' => 1, 'name' => 'Keperluan Peralatan Rumah Tangga', 'color' => '#b5da62','created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
