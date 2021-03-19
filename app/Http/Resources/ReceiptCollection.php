@@ -21,7 +21,7 @@ class ReceiptCollection extends ResourceCollection
                     'id' => $receipt->id,
                     'receipt_time' => $receipt->receipt_time,
                     "payment_method" => $receipt->payment_method,
-                    "total_item_sold" => $receipt->receiptItem->count(),
+                    "total_item_sold" => $receipt->receiptItem->sum("unit_total"),
                     "profit" => $receipt->profit
                 ];
             })
