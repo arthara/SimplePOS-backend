@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -15,20 +16,20 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
         return Auth::user()
-                ->store
-                ->product;
+            ->store
+            ->product;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -43,16 +44,16 @@ class ProductController extends Controller
             'category_id' => 'required|integer'
         ]);
 
-        if(!$this->isCategoryIdValid($request->category_id))
+        if (!$this->isCategoryIdValid($request->category_id))
             return response()->json([
                 "message" => "Category Id is not valid"
             ], 422);
 
         //if uploaded file exist
-        if ($picture =  $request->file("picture")){
+        if ($picture = $request->file("picture")) {
             $picture_path = $picture->store(Product::$PICTURE_PATH);
             //remove folder name from path
-            $picture_name = str_replace(Product::$PICTURE_PATH."/", '', $picture_path);
+            $picture_name = str_replace(Product::$PICTURE_PATH . "/", '', $picture_path);
         }
 
         $product = new Product();
@@ -67,20 +68,34 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
+    private function isCategoryIdValid($id): bool
+    {
+        $categories = Auth::user()
+            ->store
+            ->category;
+
+        foreach ($categories as $category) {
+            if ($category->id == $id)
+                return true;
+        }
+
+        return false;
+    }
+
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function show($id)
     {
-        try{
+        try {
             return Auth::user()
-                    ->store
-                    ->product()
-                    ->findOrFail($id);
-        }catch(ModelNotFoundException $e){
+                ->store
+                ->product()
+                ->findOrFail($id);
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 "message" => "Forbidden"
             ], 403);
@@ -90,9 +105,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -106,17 +121,17 @@ class ProductController extends Controller
             'category_id' => 'integer|nullable'
         ]);
 
-        try{
+        try {
             $product = Auth::user()->store->product()->findorFail($id);
-        }catch(ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 "message" => "Forbidden"
             ], 403);
         }
 
         //if category id isnt null
-        if($category_id = $request->category_id){
-            if(!$this->isCategoryIdValid($category_id))
+        if ($category_id = $request->category_id) {
+            if (!$this->isCategoryIdValid($category_id))
                 return response()->json([
                     "message" => "Category Id is not valid"
                 ], 422);
@@ -125,14 +140,14 @@ class ProductController extends Controller
         }
 
         //if uploaded file exist
-        if ($picture =  $request->file("picture")){
+        if ($picture = $request->file("picture")) {
             //if product already has logo
-            if($product->picture)
-                Storage::delete(Product::$PICTURE_PATH."/".$product->picture);
+            if ($product->picture)
+                Storage::delete(Product::$PICTURE_PATH . "/" . $product->picture);
 
             $picture_path = $picture->store(Product::$PICTURE_PATH);
             //remove folder name from path
-            $product->picture = str_replace(Product::$PICTURE_PATH."/", '', $picture_path);
+            $product->picture = str_replace(Product::$PICTURE_PATH . "/", '', $picture_path);
         }
 
         $this->renewProduct($product, $request);
@@ -140,27 +155,28 @@ class ProductController extends Controller
         return response()->json(new ProductResource($product), 200);
     }
 
-    private function renewProduct(Product $product, Request $request){
+    private function renewProduct(Product $product, Request $request)
+    {
         //nullcheck
-        if(!is_null($request->name))
+        if (!is_null($request->name))
             $product->name = $request->name;
-        if(!is_null($request->total))
+        if (!is_null($request->total))
             $product->total = $request->total;
-        if(!is_null($request->selling_price))
+        if (!is_null($request->selling_price))
             $product->selling_price = $request->selling_price;
-        if(!is_null($request->cost_price))
+        if (!is_null($request->cost_price))
             $product->cost_price = $request->cost_price;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
-        try{
+        try {
             Auth::user()
                 ->store
                 ->product()
@@ -168,23 +184,19 @@ class ProductController extends Controller
                 ->delete();
 
             return response('', 204);
-        }catch(ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 "message" => "Forbidden"
             ], 403);
         }
     }
 
-    private function isCategoryIdValid($id): bool{
-        $categories = Auth::user()
-                        ->store
-                        ->category;
+    public function getProductofSelectedCategory(Category $category)
+    {
+        $data = Product::with(
+            'category:id,name'
+        )->where('category_id', $category->id)->get();
 
-        foreach($categories as $category){
-            if($category->id == $id)
-                return true;
-        }
-
-        return false;
+        return response()->json($data, 200);
     }
 }
