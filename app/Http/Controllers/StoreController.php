@@ -53,7 +53,7 @@ class StoreController extends Controller
 
         return $store;
     }
-    
+
     public function update(Request $request, Store $store){
         $logo_name = null;
         $user = Auth::user();
