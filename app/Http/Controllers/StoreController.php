@@ -103,7 +103,6 @@ class StoreController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Update data failed!',
-                'data' => $data,
             ], 500);
     }
 }

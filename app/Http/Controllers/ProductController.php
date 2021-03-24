@@ -193,6 +193,17 @@ class ProductController extends Controller
 
     public function getProductofSelectedCategory(Category $category)
     {
+        try{
+            return Auth::user()
+                ->store
+                ->category()
+                ->findOrFail($category->id);
+        }catch(ModelNotFoundException $e){
+            return response()->json([
+                "message" => "Forbidden"
+            ], 403);
+        }
+
         $data = Product::with(
             'category:id,name'
         )->where('category_id', $category->id)->get();
