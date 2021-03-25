@@ -14,8 +14,8 @@ class A004_ProductsSeeder extends Seeder
     {
         $products = array(
             array('id' => 1, 'category_id' => 1, 'name' => 'Es Teh', 'total' => 5, 'selling_price' => 1000, 'cost_price' => 750, 'created_at' => '2021-02-05 15:09:02','updated_at' => '2021-02-05 15:09:03'),
-            array('id' => 2, 'category_id' => 14, 'name' => 'Lemper', 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
-            array('id' => 3, 'category_id' => 2, 'name' => 'Beras', 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
+            array('id' => 2, 'category_id' => 14, 'name' => 'Lemper', 'total' => 3, 'selling_price' => 1500, 'cost_price' => 500, 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
+            array('id' => 3, 'category_id' => 2, 'name' => 'Beras', 'total' => 7, 'selling_price' => 10000, 'cost_price' => 9000, 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
             array('id' => 4, 'category_id' => 3, 'name' => 'Wajan', 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
             array('id' => 5, 'category_id' => 4, 'name' => 'Jam Dinding', 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
             array('id' => 6, 'category_id' => 5, 'name' => 'Sapu Lidi', 'created_at' => '2021-02-05 15:09:03','updated_at' => '2021-02-05 15:09:04'),
