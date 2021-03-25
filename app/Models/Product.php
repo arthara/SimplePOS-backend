@@ -26,6 +26,6 @@ class Product extends BaseModel
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Category::class);
     }
 }

@@ -33,6 +33,11 @@ Route::group(['middleware' => 'api'], function(){
             Route::apiResource('categories', CategoryController::class);
             Route::apiResource('products', ProductController::class);
 
+            //List Product of Category
+            Route::group(['prefix' => 'products'], function () {
+                Route::get('/of-category/{category}', 'ProductController@getProductofSelectedCategory');
+            });
+
             Route::group(['prefix' => 'receipt-items'], function () {
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
                 Route::get('/top/{date}', 'ReceiptItemController@topSales');
@@ -41,6 +46,10 @@ Route::group(['middleware' => 'api'], function(){
             Route::prefix('receipts')->group(function () {
                 Route::post('checkout', 'ReceiptController@checkout');
                 Route::get('daily/{date}', 'ReceiptController@dailyReceipts');
+            });
+
+            Route::group(['prefix' => 'users'], function () {
+                Route::put('/{store}', 'StoreController@update');
             });
         });
     });
