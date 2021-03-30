@@ -36,6 +36,7 @@ Route::group(['middleware' => 'api'], function(){
             //List Product of Category
             Route::group(['prefix' => 'products'], function () {
                 Route::get('/of-category/{category}', 'ProductController@getProductofSelectedCategory');
+                Route::get('images/{id}', 'ProductController@getImage');
             });
 
             Route::group(['prefix' => 'receipt-items'], function () {
