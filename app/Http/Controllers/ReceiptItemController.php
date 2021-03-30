@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use Exception;
 
@@ -89,7 +90,7 @@ class ReceiptItemController extends Controller
         //pick only the first if found more than 1 max
         return response()->json([
             "date" => $inputDate,
-            "product" => Product::find($max_product_id[0]),
+            "product" => new ProductResource(Product::find($max_product_id[0])),
             "total_product" =>  $max_product,
             "category" => Category::find($max_category_id[0]),
             "total_category" =>  $max_category,

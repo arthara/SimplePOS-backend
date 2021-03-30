@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
         if($this->picture == null)
             $pictureUrl = null;
         else
-            $pictureUrl = URL::to("/products/images/".$this->id);
+            $pictureUrl = URL::to("/api/products/images/".$this->id);
 
         return [
             'id' => $this->id,

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
@@ -20,7 +21,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(
+        return new ProductCollection(
             Auth::user()
                 ->store
                 ->product
@@ -226,7 +227,7 @@ class ProductController extends Controller
 
             return Storage::download($path);
         }catch(\Exception $e) {
-            abort(404, $e->getMessage());
+            abort(403, $e->getMessage());
         }
     }
 }
