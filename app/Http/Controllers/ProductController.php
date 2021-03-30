@@ -20,9 +20,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Auth::user()
-            ->store
-            ->product;
+        return ProductResource::collection(
+            Auth::user()
+                ->store
+                ->product
+        );
     }
 
     /**
@@ -91,10 +93,12 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            return Auth::user()
-                ->store
-                ->product()
-                ->findOrFail($id);
+            return new ProductResource(
+                Auth::user()
+                    ->store
+                    ->product()
+                    ->findOrFail($id)
+            );
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 "message" => "Forbidden"
@@ -209,5 +213,20 @@ class ProductController extends Controller
         )->where('category_id', $category->id)->get();
 
         return response()->json($data, 200);
+    }
+
+    public function getImage($id) {
+        try {
+            $product = Auth::user()
+                        ->store
+                        ->product()
+                        ->findOrFail($id);
+
+            $path = Product::$PICTURE_PATH."/".$product->picture;
+
+            return Storage::download($path);
+        }catch(\Exception $e) {
+            abort(404, $e->getMessage());
+        }
     }
 }
