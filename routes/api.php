@@ -45,6 +45,7 @@ Route::group(['middleware' => 'api'], function(){
             });
 
             Route::prefix('receipts')->group(function () {
+                Route::get('/{id}', 'ReceiptController@show');
                 Route::post('checkout', 'ReceiptController@checkout');
                 Route::get('daily/{date}', 'ReceiptController@dailyReceipts');
             });

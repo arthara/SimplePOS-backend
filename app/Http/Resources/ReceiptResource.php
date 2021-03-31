@@ -25,6 +25,7 @@ class ReceiptResource extends JsonResource
             "discount" => $this->discount,
             "other_charges" => $this->other_charges,
             "note" => $this->note,
+            "item" => ReceiptItemResource::collection($this->receiptItem),
         ];
     }
 }
