@@ -199,7 +199,7 @@ class ProductController extends Controller
     public function getProductofSelectedCategory(Category $category)
     {
         try{
-            return Auth::user()
+            Auth::user()
                 ->store
                 ->category()
                 ->findOrFail($category->id);

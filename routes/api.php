@@ -50,7 +50,8 @@ Route::group(['middleware' => 'api'], function(){
             });
 
             Route::group(['prefix' => 'users'], function () {
-                Route::put('/{store}', 'StoreController@update');
+                Route::post('/{store}', 'StoreController@update');
+                Route::post('/update-note/{store}', 'StoreController@updateNoteOfStore');
             });
         });
     });

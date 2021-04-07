@@ -11,7 +11,7 @@ class Store extends BaseModel
     //
 
     public $fillable = [
-        "name", "logo", "address", "phone_number"
+        "name", "logo", "address", "phone_number", "note"
     ];
 
     public function user(){
