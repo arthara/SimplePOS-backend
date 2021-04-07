@@ -14,6 +14,20 @@ use Carbon\Carbon;
 
 class ReceiptController extends Controller
 {
+    public function show($id) {
+        try {
+            $receipt = Auth::user()
+                        ->store
+                        ->receipt()
+                        ->with("receiptItem")
+                        ->findOrFail($id);
+
+            return new ReceiptResource($receipt);
+        }catch(\Exception $e) {
+            abort(403, $e->getMessage());
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
