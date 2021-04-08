@@ -20,6 +20,7 @@ class CreateStoresTable extends Migration
             $table->string('logo', 100)->nullable();
             $table->string('address', 100)->nullable();
             $table->string('phone_number', 100)->nullable();
+            $table->string('note_receipt', 150)->nullable()->default('Terima Kasih');
             $table->timestamps();
         });
     }

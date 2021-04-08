@@ -105,4 +105,39 @@ class StoreController extends Controller
                 'message' => 'Update data failed!',
             ], 500);
     }
+
+    public function updateNoteOfStore(Request $request, Store $store){
+        $user = Auth::user();
+
+        if ($user->id != $store->user_id)
+            return response()->json(["message" => "user bukan pemilik toko"], 403);
+
+        $validator = Validator::make($request->all(), [
+            'note' => 'string|max:150|nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $isUpdate = Store::where('id', $store->id)
+            ->update([
+                'note_receipt' => $request->note_receipt
+            ]);
+
+        $data = Store::where('id', $store->id)->first();
+
+        if ($isUpdate)
+            return response()->json([
+                'success' => true,
+                'message' => 'Update data successfully!',
+                'data' => $data,
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Update data failed!',
+            ], 500);
+    }
+
 }
