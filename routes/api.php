@@ -53,6 +53,7 @@ Route::group(['middleware' => 'api'], function(){
             Route::group(['prefix' => 'users'], function () {
                 Route::post('/{store}', 'StoreController@update');
                 Route::post('/update-note/{store}', 'StoreController@updateNoteOfStore');
+                Route::post('/update-image/{store}', 'StoreController@updateImageOfStore');
             });
         });
     });

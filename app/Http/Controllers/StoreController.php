@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
@@ -75,12 +76,12 @@ class StoreController extends Controller
         //Checking File
         $uploadFile = $request->file('logo');
         if ($uploadFile != null) {
-            File::delete(storage_path(Store::$LOGO_PATH) . $store->logo);
+            Storage::delete(Store::$LOGO_PATH. "/". $store->logo);
             $path = $uploadFile->store(Store::$LOGO_PATH);
             $fileName = explode('/', $path);
             $fileName = end($fileName);
         }else{
-            $fileName = $store->image;
+            $fileName = $store->logo;
         }
 
         $isUpdate = Store::where('id', $store->id)
@@ -140,4 +141,52 @@ class StoreController extends Controller
             ], 500);
     }
 
+    public function updateImageOfStore(Request $request, Store $store)
+    {
+        $logo_name = null;
+        $user = Auth::user();
+
+        if ($user->id != $store->user_id)
+            return response()->json(["message" => "user bukan pemilik toko"], 403);
+
+        $validator = Validator::make($request->all(), [
+            'logo' => 'max:2000|mimes:jpeg,jpg,png,svg|nullable', //max size 1mb
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        //Checking File
+        $uploadFile = $request->file('logo');
+        if ($uploadFile != null) {
+            //File::delete(storage_path(Store::$LOGO_PATH) . $store->logo);
+            Storage::delete(Store::$LOGO_PATH. "/". $store->logo);
+            $path = $uploadFile->store(Store::$LOGO_PATH);
+            $fileName = explode('/', $path);
+            $fileName = end($fileName);
+        }else{
+            $fileName = $store->logo;
+        }
+
+        $isUpdate = Store::where('id', $store->id)
+            ->update([
+                'logo' => $fileName,
+            ]);
+
+        $data = Store::where('id', $store->id)->first();
+
+        if ($isUpdate)
+            return response()->json([
+                'success' => true,
+                'message' => 'Update data successfully!',
+                'data' => $data,
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Update data failed!',
+            ], 500);
+
+    }
 }
