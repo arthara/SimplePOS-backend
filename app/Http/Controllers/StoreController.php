@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StoreResource;
 use Illuminate\Http\Request;
 use App\Models\Store;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
@@ -45,13 +48,13 @@ class StoreController extends Controller
         $store->phone_number = $request->phone_number;
 
         $user->store()->save($store);
-        return response()->json($store, 201);
+        return response()->json(new StoreResource($store), 201);
     }
 
     public function index(){
         $store = Auth::user()->store;
 
-        return $store;
+        return response()->json(new StoreResource($store));
     }
 
     public function update(Request $request, Store $store){
@@ -94,11 +97,7 @@ class StoreController extends Controller
         $data = Store::where('id', $store->id)->first();
 
         if ($isUpdate)
-            return response()->json([
-                'success' => true,
-                'message' => 'Update data successfully!',
-                'data' => $data,
-            ], 200);
+            return response()->json(new StoreResource($data), 200);
         else
             return response()->json([
                 'success' => false,
@@ -128,11 +127,7 @@ class StoreController extends Controller
         $data = Store::where('id', $store->id)->first();
 
         if ($isUpdate)
-            return response()->json([
-                'success' => true,
-                'message' => 'Update data successfully!',
-                'data' => $data,
-            ], 200);
+            return response()->json(new StoreResource($data), 200);
         else
             return response()->json([
                 'success' => false,
@@ -140,4 +135,19 @@ class StoreController extends Controller
             ], 500);
     }
 
+    public function getLogo() {
+        try {
+            $store = Auth::user()
+                        ->store;
+
+            if($store->logo == null)
+                throw new Exception("Store doesnt have a logo yet");
+
+            $path = Store::$LOGO_PATH."/".$store->logo;
+
+            return Storage::download($path);
+        }catch(\Exception $e) {
+            abort(404, $e->getMessage());
+        }
+    }
 }
