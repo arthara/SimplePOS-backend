@@ -26,6 +26,7 @@ Route::group(['middleware' => 'api'], function(){
         Route::group(['prefix' => 'stores'], function () {
             Route::post('/', 'StoreController@store');
             Route::get('/', 'StoreController@index')->middleware('store');
+            Route::get('logo', 'StoreController@getLogo')->middleware('store');
         });
 
         //middleware store is to check if user already has store
