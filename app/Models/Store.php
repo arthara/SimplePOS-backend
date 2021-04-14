@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Store extends BaseModel
@@ -28,6 +29,11 @@ class Store extends BaseModel
 
     public function category(){
         return $this->hasMany(Category::class);
+    }
+
+    public function heldCheckout(): HasMany
+    {
+        return $this->hasMany(HeldCheckout::class);
     }
 
     /**
