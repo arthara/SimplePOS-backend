@@ -16,7 +16,7 @@ class HeldCheckoutItemResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "product_id" => $this->product_id,
+            "product" => $this->product,
             "unit_total" => $this->unit_total,
         ];
     }

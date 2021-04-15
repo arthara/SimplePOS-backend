@@ -40,7 +40,7 @@ class HeldCheckoutController extends Controller
     {
         $request->validate([
             "items" => "array|required|min:1",
-            'items.*.product_id' => 'required|integer',
+            'items.*.product.id' => 'required|integer',
             'items.*.unit_total' => 'required|integer|min:1',
         ]);
 
@@ -81,7 +81,7 @@ class HeldCheckoutController extends Controller
 
     private function saveCheckoutItems(HeldCheckout $heldCheckout, $checkoutItems) {
         foreach($checkoutItems as $checkoutItem) {
-            $product = Auth::user()->store->product()->findOrfail($checkoutItem["product_id"]);
+            $product = Auth::user()->store->product()->findOrfail($checkoutItem["product"]["id"]);
             $heldCheckoutItem = new HeldCheckoutItem($checkoutItem);
 
             if($product->total < $heldCheckoutItem->unit_total)

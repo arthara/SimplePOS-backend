@@ -16,7 +16,7 @@ class HeldCheckoutResource extends JsonResource
     {
         return[
            "id" => $this->id,
-           "item" => HeldCheckoutItemResource::collection($this->heldCheckoutItem),
+           "items" => HeldCheckoutItemResource::collection($this->heldCheckoutItem),
         ];
     }
 }
