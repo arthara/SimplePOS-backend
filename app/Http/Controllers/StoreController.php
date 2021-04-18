@@ -174,7 +174,7 @@ class StoreController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Update data successfully!',
-                'data' => $data,
+                'data' => new StoreResource($data),
             ], 200);
         else
             return response()->json([

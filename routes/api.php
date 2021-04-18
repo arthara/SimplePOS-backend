@@ -34,6 +34,10 @@ Route::group(['middleware' => 'api'], function(){
             Route::apiResource('categories', CategoryController::class);
             Route::apiResource('products', ProductController::class);
 
+            //Category
+            Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
+
+
             //List Product of Category
             Route::group(['prefix' => 'products'], function () {
                 Route::get('/of-category/{category}', 'ProductController@getProductofSelectedCategory');
