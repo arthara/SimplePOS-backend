@@ -34,10 +34,6 @@ Route::group(['middleware' => 'api'], function(){
             Route::apiResource('categories', CategoryController::class);
             Route::apiResource('products', ProductController::class);
 
-            //Category
-            Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
-
-
             Route::prefix('held-checkout')->group(function () {
                 Route::get('/', "HeldCheckoutController@index");
                 Route::post('/', "HeldCheckoutController@store");
@@ -49,6 +45,9 @@ Route::group(['middleware' => 'api'], function(){
                 Route::get('/of-category/{category}', 'ProductController@getProductofSelectedCategory');
                 Route::get('images/{id}', 'ProductController@getImage');
             });
+
+            //Category
+            Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
 
             Route::group(['prefix' => 'receipt-items'], function () {
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
