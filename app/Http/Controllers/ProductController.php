@@ -199,7 +199,7 @@ class ProductController extends Controller
     public function getProductofSelectedCategory(Category $category)
     {
         try{
-            Auth::user()
+            $data = Auth::user()
                 ->store
                 ->category()
                 ->findOrFail($category->id);
@@ -209,9 +209,11 @@ class ProductController extends Controller
             ], 403);
         }
 
-        $data = Product::with(
+/*        $data = Product::with(
             'category:id,name'
-        )->where('category_id', $category->id)->get();
+        )->where('category_id', $category->id)->get();*/
+
+        $data = Product::where('category_id', $category->id)->get()->toArray();
 
         return response()->json($data, 200);
     }

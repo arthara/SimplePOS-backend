@@ -125,4 +125,24 @@ class CategoryController extends Controller
             ], 403);
         }
     }
+
+    public function getCategoriesWithProductCounts()
+    {
+
+        try {
+            $categories = Auth::user()
+                ->store
+                ->category()
+                ->withCount('product')
+                ->get();
+
+            return response()->json($categories->toArray(), 200);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                "message" => "Category Forbidden"
+            ], 403);
+        }
+    }
+
 }

@@ -46,6 +46,9 @@ Route::group(['middleware' => 'api'], function(){
                 Route::get('images/{id}', 'ProductController@getImage');
             });
 
+            //Category
+            Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
+
             Route::group(['prefix' => 'receipt-items'], function () {
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
                 Route::get('/top/{date}', 'ReceiptItemController@topSales');
@@ -60,6 +63,7 @@ Route::group(['middleware' => 'api'], function(){
             Route::group(['prefix' => 'users'], function () {
                 Route::post('/{store}', 'StoreController@update');
                 Route::post('/update-note/{store}', 'StoreController@updateNoteOfStore');
+                Route::post('/update-image/{store}', 'StoreController@updateImageOfStore');
             });
         });
     });
