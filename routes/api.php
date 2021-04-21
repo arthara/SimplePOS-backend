@@ -38,6 +38,12 @@ Route::group(['middleware' => 'api'], function(){
             Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
 
 
+            Route::prefix('held-checkout')->group(function () {
+                Route::get('/', "HeldCheckoutController@index");
+                Route::post('/', "HeldCheckoutController@store");
+                Route::delete('/{id}', "HeldCheckoutController@destroy");
+            });
+
             //List Product of Category
             Route::group(['prefix' => 'products'], function () {
                 Route::get('/of-category/{category}', 'ProductController@getProductofSelectedCategory');
