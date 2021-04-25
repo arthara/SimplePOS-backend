@@ -171,11 +171,7 @@ class StoreController extends Controller
         $data = Store::where('id', $store->id)->first();
 
         if ($isUpdate)
-            return response()->json([
-                'success' => true,
-                'message' => 'Update data successfully!',
-                'data' => new StoreResource($data),
-            ], 200);
+            return response()->json(new StoreResource($data), 200);
         else
             return response()->json([
                 'success' => false,
