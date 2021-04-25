@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductCollection;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -112,7 +113,7 @@ class ProductController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse || Response
      */
     public function update(Request $request, $id)
     {
@@ -209,11 +210,11 @@ class ProductController extends Controller
             ], 403);
         }
 
-/*        $data = Product::with(
+        $data = Product::with(
             'category:id,name'
-        )->where('category_id', $category->id)->get();*/
+        )->where('category_id', $category->id)->get()->toArray();
 
-        $data = Product::where('category_id', $category->id)->get()->toArray();
+        //$data = Product::where('category_id', $category->id)->get()->toArray();
 
         return response()->json($data, 200);
     }
@@ -231,5 +232,65 @@ class ProductController extends Controller
         }catch(\Exception $e) {
             abort(403, $e->getMessage());
         }
+    }
+
+    public function updateProductResponse(Request $request, Product $product){
+
+        try {
+            $product = Auth::user()->store->product()->findorFail($product->id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                "message" => "Forbidden"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|max:100|nullable',
+            'picture' => 'max:2000|mimes:jpeg,jpg,png,svg|nullable', //max size 2mb,
+            'total' => 'integer|min:0|nullable', //value must be > 0
+            'selling_price' => 'numeric|min:0|nullable',
+            'cost_price' => 'numeric|min:0|nullable',
+            'category_id' => 'integer|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $uploadFile = $request->file('picture');
+
+        if ($uploadFile != null) {
+            Storage::delete(Product::$PICTURE_PATH . "/" . $product->picture);
+            $path = $uploadFile->store(Product::$PICTURE_PATH);
+            $fileName = explode('/', $path);
+            $fileName = end($fileName);
+        } else {
+            $fileName = $product->picture;
+        }
+
+
+        $isUpdate = Product::where('id', $product->id)
+            ->update([
+                'name' => $request->name,
+                'picture' => $fileName,
+                'total' => $request->total,
+                'selling_price' => $request->selling_price,
+                'cost_price' => $request->cost_price,
+                'category_id' => $request->category_id,
+            ]);
+
+        $product_update = Product::where('id', $product->id)->first();
+        if ($isUpdate)
+            return response()->json([
+                'success' => true,
+                'message' => 'Update data successfully!',
+                'data' => new ProductResource($product_update),
+            ], 200);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Update data failed!',
+                'data' => $product_update,
+            ], 500);
     }
 }

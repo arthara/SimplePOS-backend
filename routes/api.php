@@ -48,6 +48,7 @@ Route::group(['middleware' => 'api'], function(){
 
             //Category
             Route::get('categories-with-counts', 'CategoryController@getCategoriesWithProductCounts');
+            Route::post('/update-product-response/{product}', 'ProductController@updateProductResponse');
 
             Route::group(['prefix' => 'receipt-items'], function () {
                 Route::get('/total/{date}', 'ReceiptItemController@dailySales');
