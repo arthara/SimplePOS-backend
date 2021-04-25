@@ -31,9 +31,7 @@ class Receipt extends BaseModel
 
     public function getProfitAttribute(){
         $profit = 0;
-        $profit -= $this->tax
-                    - $this->other_charges
-                    - $this->discount;
+        $profit -= $this->discount;
 
         foreach($this->receiptItem as $receiptItem) {
             $sold_item = $receiptItem->unit_total;
